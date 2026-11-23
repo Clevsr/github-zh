@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub 中文化
 // @namespace    https://github.com/dsh-local/github-zh
-// @version      1.8.1
+// @version      1.8.2
 // @description  将 GitHub 网页界面汉化为简体中文：内置离线词库，覆盖仓库、议题、拉取请求、通知、设置等常用界面，支持动态加载、Shadow DOM 与单页导航，右下角「中/EN」按钮可即时切换、无需刷新。
 // @author       Clevsr
 // @homepageURL  https://github.com/Clevsr/github-zh
@@ -20,7 +20,7 @@
 
   if (window.__GH_ZH__) return; // 防止同一页面被重复注入
 
-  const VERSION = '1.8.1';
+  const VERSION = '1.8.2';
   const STORAGE_KEY = 'gh-zh:enabled';
   const IS_GITHUB = /(^|\.)github\.com$/.test(location.hostname) || window.__GH_ZH_FORCE__ === true;
   if (!IS_GITHUB) return;
@@ -2629,6 +2629,19 @@
     mountToggle();
   }
 
+  // 时间戳组件（relative-time 等）每秒都会自己重写文本，
+  // 等 60ms 再翻就会看到“中文 → 英文 → 中文”闪一下，所以这里当场翻。
+  const TIME_HOST_SELECTOR = 'relative-time, time-ago, local-time';
+
+  function isInTimeHost(node) {
+    let el = node && node.parentElement;
+    for (let depth = 0; el && depth < 3; depth++) {
+      if (el.matches && el.matches(TIME_HOST_SELECTOR)) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
   function handleMutations(records) {
     if (!enabled) return;
 
@@ -2643,18 +2656,27 @@
         if (record.addedNodes.length > 300) forceFull = true;
         for (let n = 0; n < record.addedNodes.length; n++) {
           const node = record.addedNodes[n];
-          if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
             roots.add(node);
+          } else if (node.nodeType === Node.TEXT_NODE) {
+            // 时间戳组件改写文本：当场翻，避免闪一下英文
+            if (isInTimeHost(node)) translateNodeText(node);
+            else roots.add(node);
           }
         }
       } else if (record.type === 'characterData') {
         if (selfChangedText.has(target)) {
           selfChangedText.delete(target);
-          continue;
+          // 标记还在、内容却已不是我们写的那句：说明页面紧接着又改了一次，要重翻
+          if (lastTranslatedText.get(target) === target.nodeValue) continue;
         }
         // GitHub 自己改了文本，旧的英文备份已失效
         originalText.delete(target);
         lastTranslatedText.delete(target);
+        if (isInTimeHost(target)) {
+          if (!translateNodeText(target)) roots.add(target);
+          continue;
+        }
         roots.add(target);
       } else if (record.type === 'attributes') {
         const attr = record.attributeName;
