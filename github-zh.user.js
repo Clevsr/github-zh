@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub 中文化
 // @namespace    https://github.com/dsh-local/github-zh
-// @version      1.7.2
+// @version      1.7.3
 // @description  将 GitHub 网页界面汉化为简体中文：内置离线词库，覆盖仓库、议题、拉取请求、通知、设置等常用界面，支持动态加载、Shadow DOM 与单页导航，右下角「中/EN」按钮可即时切换、无需刷新。
 // @author       jychen089
 // @homepageURL  https://github.com/jychen089/github-zh
@@ -20,7 +20,7 @@
 
   if (window.__GH_ZH__) return; // 防止同一页面被重复注入
 
-  const VERSION = '1.7.2';
+  const VERSION = '1.7.3';
   const STORAGE_KEY = 'gh-zh:enabled';
   const IS_GITHUB = /(^|\.)github\.com$/.test(location.hostname) || window.__GH_ZH_FORCE__ === true;
   if (!IS_GITHUB) return;
@@ -1090,6 +1090,25 @@
     'Filter:': '筛选：',
     'More languages...': '更多语言…',
     'More languages…': '更多语言…',
+    // ---- 1.7.3 新增：Insights / Pulse ----
+    'Actions performance metrics': 'Actions 性能指标',
+    'Actions usage metrics': 'Actions 用量指标',
+    'Active issues': '活跃议题',
+    'Active pull requests': '活跃拉取请求',
+    'New issues': '新建议题',
+    'Open pull requests': '打开的拉取请求',
+    'Merged pull requests': '已合并的拉取请求',
+    'Chart options': '图表选项',
+    'Customization settings': '自定义设置',
+    'End of interactive chart.': '交互式图表结束。',
+    'More items, including current item': '更多项目，包括当前项目',
+    'Period:': '周期：',
+    'Top committers': '提交最多者',
+    'Top committers. Interactive chart.': '提交最多者。交互式图表。',
+    'View as data table, Chart': '以数据表查看，图表',
+    'Community standards': '社区标准',
+    'categories': '分类',
+
     // ---- 1.7.0 新增：Markdown 工具栏 ----
     'Bold': '粗体',
     'Italic': '斜体',
@@ -1513,6 +1532,17 @@
     updated: '更新'
   };
 
+  // 多词条目的忽略大小写索引（修复 Community standards / Community Standards 这类差异）
+  const DICT_LOWER = (function () {
+    const map = Object.create(null);
+    Object.keys(DICT).forEach(function (key) {
+      if (key.indexOf(' ') === -1) return;
+      const lower = key.toLowerCase();
+      if (!(lower in map)) map[lower] = DICT[key];
+    });
+    return map;
+  })();
+
   const ACTION_NAMES = {
     opened: '开启',
     closed: '关闭',
@@ -1640,6 +1670,21 @@
     { re: /^Page (\d+)$/i, fn: (m) => '第 ' + m[1] + ' 页' },
     // 面包屑：“1 more breadcrumb items”
     { re: /^(\d+)\s+more breadcrumb items?$/i, fn: (m) => '还有 ' + m[1] + ' 个面包屑项' },
+    // 单独的时间跨度：“1 week”
+    { re: /^(\d+)\s+(second|minute|hour|day|week|month|year)s?$/i, fn: (m) => m[1] + ' ' + UNITS[m[2].toLowerCase()] },
+    // 日期范围：“November 15, 2026 – November 22, 2026”
+    { re: /^(.+?)\s+[–—-]\s+(.+)$/, fn: (m) => {
+        const from = translateDatePart(m[1]);
+        const to = translateDatePart(m[2]);
+        return from && to ? from + ' – ' + to : null;
+      }
+    },
+    // “On main ,”
+    { re: /^On (\S+)\s*,$/i, fn: (m) => '在 ' + m[1] + ' 上，' },
+    // 图表无障碍描述
+    { re: /^Bar chart with (\d+) bars?\.$/i, fn: (m) => '柱状图，共 ' + m[1] + ' 个柱子。' },
+    { re: /^The chart has (\d+) X axis displaying (.+?)\.$/i, fn: (m) => '图表有 ' + m[1] + ' 个 X 轴，显示' + (translateText(m[2]) || m[2]) + '。' },
+    { re: /^The chart has (\d+) Y axis displaying (.+?)\. Data ranges from (.+) to (.+)\.$/i, fn: (m) => '图表有 ' + m[1] + ' 个 Y 轴，显示' + (translateText(m[2]) || m[2]) + '。数据范围为 ' + m[3] + ' 到 ' + m[4] + '。' },
     // 文件页脚：“223 lines (184 loc) · 10 KB”
     { re: /^(\d[\d,]*)\s+lines?\s+\((\d[\d,]*)\s+loc\)\s+·\s+(.+)$/i, fn: (m) => m[1] + ' 行（' + m[2] + ' 行代码）· ' + m[3] },
     // “with a file smaller than 2GB.”
@@ -1810,6 +1855,12 @@
     // 允许“多个空格/换行”这类排版差异：折叠空白后再查一次
     const collapsed = core.replace(/\s+/g, ' ').trim();
     if (collapsed !== core && hasOwn(DICT, collapsed)) return DICT[collapsed];
+
+    // 多词条目忽略大小写匹配（只对含空格的短语生效，避免误伤 Code / code）
+    if (collapsed.indexOf(' ') !== -1) {
+      const lower = collapsed.toLowerCase();
+      if (DICT_LOWER[lower] !== undefined) return DICT_LOWER[lower];
+    }
 
     for (let i = 0; i < PATTERNS.length; i++) {
       const pattern = PATTERNS[i];

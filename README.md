@@ -2,11 +2,34 @@
 
 把 GitHub 网页界面汉化成简体中文的 Tampermonkey / Violentmonkey 用户脚本。纯离线词库，不联网、不读取账号数据，安装后打开 `github.com` 自动生效。
 
-- 主文件：[github-zh.user.js](github-zh.user.js)（单文件，**1276 条词库 + 100 条动态规则**）
-- 版本：**1.7.2**
+- 主文件：[github-zh.user.js](github-zh.user.js)（单文件，**1293 条词库 + 106 条动态规则**）
+- 版本：**1.7.3**
 - 在线安装：<https://raw.githubusercontent.com/jychen089/github-zh/main/github-zh.user.js>
 - 适用站点：`https://github.com/*`（桌面端 + 移动端网页）
 - 许可证：MIT
+
+## 1.7.3 更新重点：Insights / Pulse 页 + 大小写容错
+
+| 类型 | 内容 |
+| --- | --- |
+| 词条 | Active issues、Active pull requests、Merged pull requests、New issues、Open pull requests、Top committers、Chart options、Actions 指标等 |
+| 规则 | `1 week` 时间跨度、`November 15, 2026 – November 22, 2026` 日期范围、图表无障碍描述、`On main ,` |
+
+### 多词短语忽略大小写
+
+`Community standards` 之前翻不出来——词库里是 `Community Standards`（大写 S），而脚本是严格区分大小写的。
+
+现在对**含空格的短语**增加一层忽略大小写回退，单字不受影响（`code` 不会被当成 `Code`）。
+
+### 有意保留英文的一句
+
+Pulse 页那句统计文案被拆成 7 个节点（数字夹在中间）：
+
+```
+Excluding merges, [3] authors have changed [5] files and there have been [2] commits to all branches.
+```
+
+逐碎片翻译会变成「…5 files 2 commits…」的中英混排，所以按照整句一致性策略，这句**整句保留英文**。这是刻意取舍，不是漏翻。
 
 ## 1.7.2 更新重点：支持在线安装与自动更新
 
@@ -297,13 +320,13 @@ __GH_ZH__.setStrictSentences(true)    // 恢复一致性优先（默认）
 ### 控制台接口
 
 ```js
-__GH_ZH__.version                        // '1.7.2'
+__GH_ZH__.version                        // '1.7.3'
 __GH_ZH__.setEnabled(false)              // 立即还原英文
 __GH_ZH__.translateAll()                 // 重新扫描整页
 __GH_ZH__.restoreAll()                   // 还原所有已翻译内容
 __GH_ZH__.setStrictSentences(false)      // 关闭整句一致性（允许半翻）
 __GH_ZH__.translateText('Pull requests') // '拉取请求'
-Object.keys(__GH_ZH__.dict).length       // 1276
+Object.keys(__GH_ZH__.dict).length       // 1293
 
 // 漏翻检测
 __GH_ZH__.findMissing()
@@ -389,6 +412,12 @@ node --check github-zh.user.js
 4. 打开个人资料页，确认没有出现中英混排的残句
 
 ## 更新日志
+
+### 1.7.3
+
+- 补齐 Insights / Pulse 页词条与图表描述规则
+- 多词短语支持忽略大小写（修复 `Community standards`）
+- 词库 1276 → 1293 条，规则 100 → 106 条
 
 ### 1.7.2
 
