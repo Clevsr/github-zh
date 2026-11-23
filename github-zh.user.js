@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         GitHub 中文化
 // @namespace    https://github.com/dsh-local/github-zh
-// @version      1.7.3
+// @version      1.8.1
 // @description  将 GitHub 网页界面汉化为简体中文：内置离线词库，覆盖仓库、议题、拉取请求、通知、设置等常用界面，支持动态加载、Shadow DOM 与单页导航，右下角「中/EN」按钮可即时切换、无需刷新。
-// @author       jychen089
-// @homepageURL  https://github.com/jychen089/github-zh
-// @supportURL   https://github.com/jychen089/github-zh/issues
-// @updateURL    https://raw.githubusercontent.com/jychen089/github-zh/main/github-zh.user.js
-// @downloadURL  https://raw.githubusercontent.com/jychen089/github-zh/main/github-zh.user.js
+// @author       Clevsr
+// @homepageURL  https://github.com/Clevsr/github-zh
+// @supportURL   https://github.com/Clevsr/github-zh/issues
+// @updateURL    https://raw.githubusercontent.com/Clevsr/github-zh/main/github-zh.user.js
+// @downloadURL  https://raw.githubusercontent.com/Clevsr/github-zh/main/github-zh.user.js
 // @match        https://github.com/*
 // @run-at       document-start
 // @grant        none
@@ -20,7 +20,7 @@
 
   if (window.__GH_ZH__) return; // 防止同一页面被重复注入
 
-  const VERSION = '1.7.3';
+  const VERSION = '1.8.1';
   const STORAGE_KEY = 'gh-zh:enabled';
   const IS_GITHUB = /(^|\.)github\.com$/.test(location.hostname) || window.__GH_ZH_FORCE__ === true;
   if (!IS_GITHUB) return;
@@ -1090,6 +1090,113 @@
     'Filter:': '筛选：',
     'More languages...': '更多语言…',
     'More languages…': '更多语言…',
+    // ---- 1.8.1 新增：文件页更多菜单 ----
+    'Raw file content': '原始文件内容',
+    'Ask about this file': '询问关于此文件',
+    'View options': '查看选项',
+    'Show code folding buttons': '显示代码折叠按钮',
+    'Hide code folding buttons': '隐藏代码折叠按钮',
+    'Wrap lines': '自动换行',
+    'Unwrap lines': '取消自动换行',
+    'Center content': '内容居中',
+    'Open symbols on click': '单击打开符号',
+    'Copy file path': '复制文件路径',
+
+    // ---- 1.7.4 新增：账户设置 ----
+    'Change username': '更改用户名',
+    'Change my username': '更改我的用户名',
+    'Additional billing details': '其他账单信息',
+    'AI usage': 'AI 用量',
+    'Archives': '归档',
+    'Billing and licensing': '账单与许可',
+    'Blocked users': '已屏蔽用户',
+    'Budgets and alerts': '预算与提醒',
+    'Cloud': '云端',
+    'Code review limits': '代码审查限制',
+    'Code, planning, and automation': '代码、规划与自动化',
+    'Credentials': '凭据',
+    'Education benefits': '教育权益',
+    'Features': '功能',
+    'Interaction limits': '互动限制',
+    'Issue fields': '议题字段',
+    'Issue types': '议题类型',
+    'Licensing': '许可',
+    'Moderation': '内容审核',
+    'Payment history': '付款历史',
+    'Payment information': '付款信息',
+    'Planning': '规划',
+    'Scheduled reminders': '定时提醒',
+    'Security log': '安全日志',
+    'Sponsorship log': '赞助日志',
+    'Usage': '用量',
+    'User settings': '用户设置',
+    'Settings menu': '设置菜单',
+    'Your personal account': '你的个人账户',
+    'Your username or email:': '你的用户名或电子邮件：',
+    'Enter a new username': '输入新用户名',
+    'Really change your username?': '确定要更改用户名吗？',
+    'I understand, let’s change my username': '我明白，更改我的用户名',
+    "I understand, let's change my username": '我明白，更改我的用户名',
+    'Renaming may take a few minutes to complete.': '重命名可能需要几分钟才能完成。',
+    'Changing your username can have': '更改用户名可能会产生',
+    'unintended side effects': '意外副作用',
+    'Search by username, full name, or email address': '按用户名、全名或电子邮件地址搜索',
+    'This is extremely important.': '这一点极其重要。',
+    'Unexpected bad things will happen if you don’t read this!': '如果不读这段内容，可能会发生意外！',
+    "Unexpected bad things will happen if you don't read this!": '如果不读这段内容，可能会发生意外！',
+    'Once you delete your account, there is no going back. Please be certain.': '账户一旦删除将无法恢复，请务必确认。',
+    'Deleting your user account': '删除你的用户账户',
+    'Delete your account': '删除你的账户',
+    'Delete account': '删除账户',
+    'delete my account': '删除我的账户',
+    'Cancel plan and delete this account': '取消套餐并删除此账户',
+    'Are you sure you want to do this?': '确定要这样做吗？',
+    "You'll be prompted to verify your identity before account deletion.": '删除账户前会要求你验证身份。',
+    'You’ll be prompted to verify your identity before account deletion.': '删除账户前会要求你验证身份。',
+    'Export account data': '导出账户数据',
+    'Start export': '开始导出',
+    'Successor settings': '继任者设置',
+    'Add Successor': '添加继任者',
+    'Designate Successor': '指定继任者',
+    'Learn more about account successors.': '了解有关账户继任者的更多信息。',
+    'You have not designated a successor.': '你尚未指定继任者。',
+    'designated below': '下方指定的',
+    'We set up redirects for Pages sites.': '我们会为 Pages 站点设置重定向。',
+    'We set up redirects for your old profile page.': '我们会为你的旧个人资料页设置重定向。',
+    'We create redirects for your repositories (web and git access).': '我们会为你的仓库创建重定向（网页和 git 访问）。',
+    'We will': '我们将',
+    'will not': '将不会',
+    'For more help, read our article': '如需更多帮助，请阅读我们的文章',
+    'Looking to manage account security settings? You can find them in the': '想管理账户安全设置？可以在以下页面找到：',
+    'To verify, type exactly as it appears:': '要验证，请完全按原样输入：',
+    'Connect with Patreon': '使用 Patreon 连接',
+    'Link Patreon account': '关联 Patreon 账户',
+    'Connect a Patreon account for': '连接 Patreon 账户以',
+
+    // ---- 1.7.4 新增：贡献日历 / 日期名称 ----
+    'January': '一月', 'February': '二月', 'March': '三月', 'April': '四月',
+    'May': '五月', 'June': '六月', 'July': '七月', 'August': '八月',
+    'September': '九月', 'October': '十月', 'November': '十一月', 'December': '十二月',
+    'Jan': '1 月', 'Feb': '2 月', 'Mar': '3 月', 'Apr': '4 月',
+    'Jun': '6 月', 'Jul': '7 月', 'Aug': '8 月', 'Sep': '9 月', 'Oct': '10 月', 'Nov': '11 月', 'Dec': '12 月',
+    'Monday': '星期一', 'Tuesday': '星期二', 'Wednesday': '星期三', 'Thursday': '星期四',
+    'Friday': '星期五', 'Saturday': '星期六', 'Sunday': '星期日',
+    'Mon': '周一', 'Tue': '周二', 'Wed': '周三', 'Thu': '周四', 'Fri': '周五', 'Sat': '周六', 'Sun': '周日',
+    'Day of Week': '星期',
+    'Year:': '年份：',
+    'GitHub profile guide': 'GitHub 个人资料指南',
+    'First repository': '第一个仓库',
+    'Created their first repository': '创建了第一个仓库',
+    'High contributions.': '贡献量高。',
+    'Low contributions.': '贡献量低。',
+    'Medium-high contributions.': '贡献量中高。',
+    'Medium-low contributions.': '贡献量中低。',
+    'No contributions.': '无贡献。',
+    'Turning on private contributions will show anonymized private activity on your profile.': '开启私有贡献后，你的个人资料中会显示匿名化的私有活动。',
+    'Turning on the activity overview will show an overview of your activity across organizations and repositories.': '开启活动概览后，会显示你跨组织和仓库的活动概览。',
+    'Seeing something unexpected? Take a look at the': '看到意外内容？请查看',
+
+
     // ---- 1.7.3 新增：Insights / Pulse ----
     'Actions performance metrics': 'Actions 性能指标',
     'Actions usage metrics': 'Actions 用量指标',
@@ -1670,8 +1777,34 @@
     { re: /^Page (\d+)$/i, fn: (m) => '第 ' + m[1] + ' 页' },
     // 面包屑：“1 more breadcrumb items”
     { re: /^(\d+)\s+more breadcrumb items?$/i, fn: (m) => '还有 ' + m[1] + ' 个面包屑项' },
+    // 账户设置：“Export all repositories and profile metadata for X. Exports will be available for 7 days.”
+    { re: /^Export all repositories and profile metadata for (.+?)\. Exports will be available for (\d+) days\.$/i, fn: (m) => '导出 ' + m[1] + ' 的所有仓库与个人资料元数据。导出文件将在 ' + m[2] + ' 天内可下载。' },
+    { re: /^immediately delete all of your repositories \((\d+)\)$/i, fn: (m) => '立即删除你的所有仓库（' + m[1] + '）' },
+    { re: /^You will no longer be billed, and after (\d+) days your username will be available to anyone on GitHub\.$/i, fn: (m) => '你将不再被收取费用，' + m[1] + ' 天后你的用户名将对 GitHub 上的任何人开放。' },
+
+    // 贡献图：“3 contributions on November 22nd.”
+    { re: /^(\d[\d,]*)\s+contributions? on (.+?)\.?$/i, fn: (m) => {
+        const date = translateDatePart(m[2]);
+        return date ? date + '有 ' + m[1] + ' 次贡献' : null;
+      }
+    },
+    // “Contribution activity in 2023, 4 of 4”
+    { re: /^Contribution activity in (\d{4}), (\d+) of (\d+)$/i, fn: (m) => m[1] + ' 年的贡献活动，第 ' + m[2] + ' 项，共 ' + m[3] + ' 项' },
+    // “Created 1 other repository” / “Created 7 commits in 2 repositories”
+    { re: /^Created (\d[\d,]*)\s+other repositories$/i, fn: (m) => '创建了 ' + m[1] + ' 个其他仓库' },
+    { re: /^Created (\d[\d,]*)\s+other repository$/i, fn: (m) => '创建了 ' + m[1] + ' 个其他仓库' },
+    { re: /^Created (\d[\d,]*)\s+commits? in (\d[\d,]*)\s+repositor(?:y|ies)$/i, fn: (m) => '在 ' + m[2] + ' 个仓库中创建了 ' + m[1] + ' 次提交' },
+    // “This contribution was made on Nov 23”
+    { re: /^This contribution was made on (.+)$/i, fn: (m) => {
+        const date = translateDatePart(m[1]);
+        return date ? '此贡献于 ' + date + '完成' : null;
+      }
+    },
     // 单独的时间跨度：“1 week”
     { re: /^(\d+)\s+(second|minute|hour|day|week|month|year)s?$/i, fn: (m) => m[1] + ' ' + UNITS[m[2].toLowerCase()] },
+    { re: /^Export all repositories and profile metadata for$/i, fn: () => '导出所有仓库和个人资料元数据：' },
+    { re: /^\. Exports will be available for (\d+) days\.$/i, fn: (m) => '。导出文件将在 ' + m[1] + ' 天内可用。' },
+
     // 日期范围：“November 15, 2026 – November 22, 2026”
     { re: /^(.+?)\s+[–—-]\s+(.+)$/, fn: (m) => {
         const from = translateDatePart(m[1]);
@@ -1972,16 +2105,19 @@
     return text.replace(/^[\s(\[（【]+/, '').replace(/[\s)\]）】]+$/, '');
   }
 
+  // 组合键：alt shift r / ctrl+shift+p / g then d / 单个字母
+  const SHORTCUT_RE = /^(?:(?:alt|shift|ctrl|cmd|meta|option|command|fn)\s+)+[a-z0-9+#\/]$|^g then [a-z]$|^[a-z]$/i;
+
   function shouldSkipFragment(raw) {
     let text = String(raw).trim();
     if (!text) return true;
     if (PUNCT_ONLY_RE.test(text)) return true;
     // 去掉括号后是纯标点 / 快捷键的，也一并跳过
-    const unwrapped = stripBrackets(text);
+    const unwrapped = stripBrackets(text).trim();
+    if (SHORTCUT_RE.test(unwrapped)) return true;
     if (unwrapped !== text) {
       if (!unwrapped) return true;
       if (PUNCT_ONLY_RE.test(unwrapped)) return true;
-      if (/^g then [a-z]$/i.test(unwrapped)) return true;
       text = unwrapped;
     }
     // 有大小写的通常是真实词条（Lists、Repositories），不要误跳过
@@ -2874,6 +3010,9 @@
   // 键盘快捷键记号：g then d / alt shift r / enter / 单个字母
   const KEYBOARD_RE = /^(g then [a-z]|(?:alt|shift|ctrl|cmd|meta|option|command)\s+[a-z]|(?:alt|shift|ctrl|cmd|meta|option|command)(?:\s+(?:alt|shift|ctrl|cmd|meta|option|command))*\s+[a-z0-9]|[a-z]|[a-z]\+[a-z])$/i;
 
+  // 括号包裹的用户名：(jychen089)
+  const PAREN_NAME_RE = /^\([A-Za-z0-9-]{2,30}\)$/;
+
   // 文件名 + 类型标记：README.md, (File) / docs, (Directory)
   const FILE_LABEL_RE = /^[\w.\- ]+,\s*\((File|Directory|Symlink|Submodule|Executable File)\)$/;
 
@@ -2924,6 +3063,8 @@
     if (ABBREV_NUM_RE.test(text)) return true;
     if (TIMING_RE.test(text)) return true;
     if (FILE_SIZE_RE.test(text)) return true;
+    if (PAREN_NAME_RE.test(text)) return true;
+    if (knownIdentities.has(text.toLowerCase())) return true;
     if (FILE_LABEL_RE.test(text)) return true;
     if (SCREEN_READER_RE.test(text)) return true;
     // 全小写单词基本是用户名 / 标识符；词库已有的（如 settings）不受影响
@@ -2935,6 +3076,25 @@
     // 纯大写短词：HIFI / PC / WIFI 这类设备名或标识
     if (/^[A-Z0-9#+._-]{2,6}$/.test(text) && !/[a-z]/.test(text)) return true;
     return false;
+  }
+
+  // 当前用户 / 仓库所有者，用于过滤“Clevsr”这类用户名
+  let knownIdentities = new Set();
+
+  function collectIdentities() {
+    const set = new Set();
+    try {
+      const metas = document.querySelectorAll('meta[name="user-login"], meta[name="octolytics-dimension-user_login"], meta[name="octolytics-dimension-repository_owner"]');
+      for (let i = 0; i < metas.length; i++) {
+        const value = (metas[i].getAttribute('content') || '').trim().toLowerCase();
+        if (value) set.add(value);
+      }
+    } catch (error) {
+      /* 不支持时忽略 */
+    }
+    const segments = String(location.pathname || '').split('/').filter(Boolean);
+    if (segments.length >= 2) set.add(segments[0].toLowerCase());
+    return set;
   }
 
   const MISSING_ATTRS = ['title', 'aria-label', 'placeholder'];
@@ -3012,6 +3172,7 @@
   }
 
   function collectMissing(limit) {
+    knownIdentities = collectIdentities();
     const found = new Map();
     const cap = Math.min(Math.max(Number(limit) || 300, 20), 1000);
 
